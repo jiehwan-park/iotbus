@@ -1,0 +1,13 @@
+[Unit]
+Description=IoTBus Server Daemon
+Requires=dbus.service
+
+[Service]
+SmackProcessLabel=System
+Type=simple
+ExecStart=/usr/bin/iotbus_server
+Restart=always
+RestartSec=0
+
+[Install]
+WantedBy=tizen-system.target

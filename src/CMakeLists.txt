@@ -1,0 +1,25 @@
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/include/)
+INCLUDE_DIRECTORIES(iotbus_interface)
+INCLUDE_DIRECTORIES(iotbus_server)
+INCLUDE_DIRECTORIES(include)
+
+FILE(GLOB PROJECT_SRCS *.c  ${CMAKE_SOURCE_DIR}/src/iotbus_interface/*.c ${CMAKE_SOURCE_DIR}/src/iotbus_api/*.c)
+
+INCLUDE(FindPkgConfig)
+pkg_check_modules(project_pkgs REQUIRED glib-2.0 dlog capi-base-common gio-2.0 capi-system-info gio-unix-2.0)
+
+INCLUDE_DIRECTORIES(${project_pkgs_INCLUDE_DIRS})
+LINK_DIRECTORIES(${project_pkgs_LIBRARY_DIRS})
+
+
+
+ADD_LIBRARY(${PROJECT_NAME} SHARED ${PROJECT_SRCS})
+TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${project_pkgs_LIBRARIES} ${CLIENT})
+INSTALL(TARGETS ${PROJECT_NAME} DESTINATION ${LIB_INSTALL_DIR})
+
+
+SET(PREFIX ${CMAKE_INSTALL_PREFIX})
+
+FILE(GLOB PROJECT_HEADER *.h include/*.h iotbus_interface/*.h ${CMAKE_SOURCE_DIR}/include/*.h iotbus_api/*.h)
+
+INSTALL(FILES ${PROJECT_HEADER} DESTINATION ${INCLUDE_INSTALL_DIR}/${PROJECT_NAME})
